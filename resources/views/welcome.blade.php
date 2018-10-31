@@ -9,10 +9,11 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" type="text/css" href="/css/app.css">
 
         <!-- Styles -->
         <style>
-            html, body {
+            /* html, body {
                 background-color: #fff;
                 color: #636b6f;
                 font-family: 'Raleway', sans-serif;
@@ -61,36 +62,40 @@
 
             .m-b-md {
                 margin-bottom: 30px;
-            }
+            } */
         </style>
     </head>
     <body>
-        <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
-                        <a href="{{ route('register') }}">Register</a>
-                    @endauth
+        <div class="container-fluid">
+            <div class="header">
+                <h3 class="text-center">Recipe Puppy</h3>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="list-group">
+                        {{-- <form action="">
+                            <
+                        </form> --}}
+                        @foreach($recipes->results as $recipe)
+                        <a href="{{ $recipe->href }}" class="list-group-item list-group-item-action flex-column align-items-start" target="iframe1">
+                        <div class="row">
+                            <div class="col-md-3 image">
+                                <img src="{{ $recipe->thumbnail }}" alt="Recipe">
+                            </div>
+                            <div class="col-md-9">
+                                <h4>{{ $recipe->title }}</h4>
+                                <p>{{ $recipe->ingredients }}</p>
+                            </div>
+                        </div>    
+                        </a>    
+                        @endforeach
+                    </div>
                 </div>
-            @endif
-
-            <div class="content">
-                <div class="title m-b-md">
-                    Laravel
-                </div>
-
-                <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+                <div class="col-md-8">
+                    <iframe name="iframe1" title="Recipe Page" width="100%" height="600" src="https://www.allrecipes.com/recipe/68898/potato-and-cheese-frittata/">
+                    </iframe>
                 </div>
             </div>
-        </div>
-        <div><?php print_r($recipes); ?></div>
+        </div>        
     </body>
 </html>
