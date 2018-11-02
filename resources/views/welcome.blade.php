@@ -13,89 +13,83 @@
 
         <!-- Styles -->
         <style>
-            /* html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Raleway', sans-serif;
-                font-weight: 100;
-                height: 100vh;
-                margin: 0;
+            .image img {
+                width: 100%;
             }
-
-            .full-height {
-                height: 100vh;
+            .header {
+                margin: 30px;
             }
-
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
+            .hide {
+                display: none;
             }
-
-            .position-ref {
-                position: relative;
-            }
-
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
-            }
-
-            .content {
-                text-align: center;
-            }
-
-            .title {
-                font-size: 84px;
-            }
-
-            .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 12px;
-                font-weight: 600;
-                letter-spacing: .1rem;
-                text-decoration: none;
-                text-transform: uppercase;
-            }
-
-            .m-b-md {
-                margin-bottom: 30px;
-            } */
         </style>
     </head>
     <body>
         <div class="container-fluid">
             <div class="header">
                 <h3 class="text-center">Recipe Puppy</h3>
+                {{-- <div>{{$jsonurl}}</div> --}}
             </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="list-group">
-                        {{-- <form action="">
-                            <
-                        </form> --}}
-                        @foreach($recipes->results as $recipe)
-                        <a href="{{ $recipe->href }}" class="list-group-item list-group-item-action flex-column align-items-start" target="iframe1">
-                        <div class="row">
-                            <div class="col-md-3 image">
-                                <img src="{{ $recipe->thumbnail }}" alt="Recipe">
-                            </div>
-                            <div class="col-md-9">
-                                <h4>{{ $recipe->title }}</h4>
-                                <p>{{ $recipe->ingredients }}</p>
-                            </div>
-                        </div>    
-                        </a>    
-                        @endforeach
+            <form action="" method="GET" id="searchForm">
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label for="title">Title</label>
+                        <input type="text" name="title" value="{{ array_key_exists('title', $formInput) ? $formInput['title'] : ''}}" class="form-control" placeholder="e.g. Cake">
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label for="ingredients">Ingredients</label>
+                            <input type="text" name="ingredients" value="{{array_key_exists('ingredients', $formInput) ? $formInput['ingredients'] : ''}}" class="form-control" placeholder="e.g. tomato, cheese">
+                        </div>
+                    </div>
+                    <div class="col-md-2" style="padding-top: 30px; text-align: center;">
+                        <input type="hidden" value="1" name="page" id="page">
+                        <button type="reset" class="btn">Reset</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
                 </div>
-                <div class="col-md-8">
-                    <iframe name="iframe1" title="Recipe Page" width="100%" height="600" src="https://www.allrecipes.com/recipe/68898/potato-and-cheese-frittata/">
-                    </iframe>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="list-group">
+                            @foreach($recipes->results as $recipe)
+                            <a href="{{ $recipe->href }}" class="list-group-item list-group-item-action flex-column align-items-start" target="iframe1">
+                            <div class="row">
+                                <div class="col-md-3 image">
+                                    <img src="{{ $recipe->thumbnail }}" alt="Recipe">
+                                </div>
+                                <div class="col-md-9">
+                                    <h4>{{ $recipe->title }}</h4>
+                                    <p>{{ $recipe->ingredients }}</p>
+                                </div>
+                            </div>    
+                            </a>    
+                            @endforeach
+                            <?php $pageNo = array_key_exists('page', $formInput) ? $formInput['page'] : 1; ?>
+                            <div class="list-group-item list-group-item-action flex-column align-items-start">
+                                <ul class="pagination">
+                                <li class="page-item {{ $pageNo <= 1 ? ' hide' : '' }}" onclick="goToPage({{ $pageNo - 1 }})"><span class="page-link">Previous</span></li>
+                                    <li class="page-item"><span class="page-link">{{ $pageNo }}</span></li>
+                                    <li class="page-item {{ $pageNo >= 100 ? ' hide' : '' }}" onclick="goToPage({{ $pageNo + 1 }})"><span class="page-link">Next</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <iframe name="iframe1" title="Recipe Page" width="100%" height="600">
+                        </iframe>
+                    </div>
                 </div>
-            </div>
-        </div>        
+            </form>
+        </div>
+        <script type="text/javascript" src="/js/app.js" ></script>
+        <script>
+            function goToPage(pageNo) {
+                var searchForm = document.getElementById("searchForm");
+                document.getElementById("page").value = pageNo;
+                searchForm.submit();
+            }
+        </script>
     </body>
 </html>
